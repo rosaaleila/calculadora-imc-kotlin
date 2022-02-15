@@ -6,7 +6,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import java.text.DecimalFormat
-import java.text.NumberFormat
+
+private lateinit var pesoEditText: EditText
+private lateinit var alturaEditText: EditText
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,28 +18,35 @@ class MainActivity : AppCompatActivity() {
         val calcular = findViewById<Button>(R.id.calcular)
 
         calcular.setOnClickListener() {
-            val peso = findViewById<EditText>(R.id.pesoUsuario).text.toString().toDouble()
-            val altura = findViewById<EditText>(R.id.alturaUsuario).text.toString().toDouble()
-            val imc = DecimalFormat("#,##0.00").format(peso / (altura * altura)).toString().toDouble()
 
-            val imcStatus = if (imc < 18.5) {
-                "Abaixo do peso."
-            } else if (imc in 18.5..24.9) {
-                "Peso normal."
-            } else if (imc >= 25 && imc < 29.9) {
-                "Sobrepeso."
-            } else if (imc >= 30 && imc < 34.9) {
-                "Obesidade Grau I."
-            } else if (imc >= 35 && imc < 40) {
-                "Obesidade Grau II."
-            } else {
-                "Obesidade Grau III ou Mórbida. Cuidado!"
+            pesoEditText = findViewById(R.id.pesoUsuario)
+            alturaEditText = findViewById(R.id.alturaUsuario)
+
+            if (validarCampos()) {
+                val peso = pesoEditText.text.toString().toDouble()
+                val altura = alturaEditText.text.toString().toDouble()
+                val imc = DecimalFormat("#,##").format(calcularIMC(peso, altura)).toDouble()
+
+                val resultadoTextView = findViewById<TextView>(R.id.resultado)
+                resultadoTextView.text =
+                    String.format("Seu IMC é %s.%nStatus: %s", imc, definirEstado(imc))
             }
+        }
+    }
 
-            val textoResultado = findViewById<TextView>(R.id.resultado)
-            textoResultado.text = String.format("Seu IMC é %s.%nStatus: %s", imc, imcStatus)
+    private fun validarCampos(): Boolean {
+        var noError = true
 
+        if (pesoEditText.text.isBlank()) {
+            pesoEditText.setError("Digite um valor!!")
+            noError = false
         }
 
+        if (alturaEditText.text.isBlank()) {
+            alturaEditText.setError("Digite um valor!")
+            noError = false
+        }
+
+        return noError
     }
 }
