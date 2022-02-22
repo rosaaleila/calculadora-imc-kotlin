@@ -1,5 +1,6 @@
 package com.senai.calculadoraimc
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -26,10 +27,18 @@ class MainActivity : AppCompatActivity() {
                 val peso = pesoEditText.text.toString().toDouble()
                 val altura = alturaEditText.text.toString().toDouble()
                 val imc = DecimalFormat("#,##").format(calcularIMC(peso, altura)).toDouble()
+                val resultadoIMC = String.format("Seu IMC é %s.%nStatus: %s", imc, definirEstado(imc))
 
-                val resultadoTextView = findViewById<TextView>(R.id.resultado)
-                resultadoTextView.text =
-                    String.format("Seu IMC é %s.%nStatus: %s", imc, definirEstado(imc))
+            val intent = Intent(this, ResultadoActivity::class.java)
+                intent.putExtra("resultado", resultadoIMC)
+
+
+                startActivity(intent)
+
+//
+//                val resultadoTextView = findViewById<TextView>(R.id.resultado)
+//                resultadoTextView.text =
+//                    String.format("Seu IMC é %s.%nStatus: %s", imc, definirEstado(imc))
             }
         }
     }

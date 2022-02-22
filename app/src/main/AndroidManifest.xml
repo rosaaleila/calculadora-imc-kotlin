@@ -10,6 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CalculadoraIMC">
         <activity
+            android:name=".ResultadoActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
